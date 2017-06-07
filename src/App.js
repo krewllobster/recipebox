@@ -19,6 +19,16 @@ class App extends Component {
             'meatballs'
           ]
         },
+        {
+          name: 'Spaghettis',
+          description: 'lorem ipsum dolor sit amet',
+          open: false,
+          parts: [
+            'noodles',
+            'sauce',
+            'meatballs'
+          ]
+        },
       ],
     }
   }
@@ -35,47 +45,52 @@ class App extends Component {
   }
 }
 
-const Recipe = ({item}) =>
-  <div className = 'card'>
-    <div className = 'card-header'>
-      <a className="btn btn-primary"
-        data-toggle="collapse"
-        href={`#${item.name}`}
-        aria-expanded="false"
-        aria-controls={`#${item.name}`}
-      >{item.name}</a>
-    </div>
-    <div className = 'collapse' id={item.name}>
-      <div className = 'card-block'>
-        <p className = 'card-text'>{item.description}</p>
-      </div>
-      <ul className = "list-group list-group-flush">
-        {item.parts.map(part => (
-          <li className = 'list-group-item'>{part}</li>
-        ))}
-      </ul>
-      <div className = 'card-footer'>
-        <Button
-          type = 'button'
-          value = 'delete'
-          onClick = {() => {}}
-          cName = 'btn btn-danger'
-        >
-          Delete
-        </Button>
-        <Button
-          type = 'button'
-          value = 'edit'
-          onClick = {() => {}}
-          cName = 'btn btn-secondary'
-        >
-          Edit
-        </Button>
+const Recipe = ({item}) => {
 
+  const toggle =
+
+  return (
+    <div className = 'card recipe'>
+      <div className = 'card-header'>
+        <a className="recipeName">{item.name}</a>
+      </div>
+      <div className='toggle-on'>
+        <div className = 'card-block'>
+          <p className = 'card-text description'>{item.description}</p>
+        </div>
+        <ul className = "list-group list-group-flush">
+          {item.parts.map(part => (
+            <li className = 'list-group-item'>{part}</li>
+          ))}
+        </ul>
+        <div className = 'card-footer'>
+          <div className = 'row'>
+            <div className = 'col-sm-3 col-6'>
+              <Button
+                type = 'button'
+                value = 'delete'
+                onClick = {() => {}}
+                cName = 'btn btn-danger'
+              >
+                Delete
+              </Button>
+            </div>
+            <div className = 'col-sm-3 col-6'>
+              <Button
+                type = 'button'
+                value = 'edit'
+                onClick = {() => {}}
+                cName = 'btn btn-secondary'
+              >
+                Edit
+              </Button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-
+  )
+}
 
 const RecipeBox = ({recipes}) =>
   <div className = 'card main'>

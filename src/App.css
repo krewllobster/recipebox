@@ -1,4 +1,17 @@
 .main {
   max-width: 50rem;
   margin: auto;
+  margin-top: 20px;
+}
+
+.recipe {
+  margin-bottom: 10px;
+}
+
+.recipeName {
+  width: 100%;
+}
+
+.description {
+  font-style: italic;
 }
