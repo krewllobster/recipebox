@@ -9,10 +9,12 @@ class AddRecipeModal extends Component {
   constructor(props) {
     super(props);
 
+    const {recipe} = this.props
+
     this.state = {
-      name: '',
-      parts: [],
-      description: '',
+      name: recipe ? recipe.name : '',
+      parts: recipe ? recipe.parts : [],
+      description: recipe ? recipe.description : '',
     }
 
     this.onOk = this.props.onOk;
@@ -48,7 +50,20 @@ class AddRecipeModal extends Component {
     this.onOk(newRecipe);
   }
 
+  update() {
+    const {name, parts, description} = this.state;
+    let newRecipe = {
+      'name': name,
+      'parts': parts,
+      'description': description,
+      'open': false,
+    }
+    this.updateRecipe(newRecipe);
+  }
+
   render() {
+
+    const {name, parts, description} = this.state;
 
     return (
       <ModalWrapper
@@ -65,7 +80,9 @@ class AddRecipeModal extends Component {
             type='text'
             className = 'form-control'
             placeholder = 'recipe name'
-            onChange = {this.nameChange}/>
+            onChange = {this.nameChange}
+            value = {name}
+          />
         </div>
         <div className = 'card-block'>
           <div className = 'form-group'>
@@ -78,6 +95,7 @@ class AddRecipeModal extends Component {
               rows='2'
               onChange = {this.descriptionChange}
               placeholder = 'recipe description'
+              value = {description}
             />
           </div>
 
@@ -90,6 +108,7 @@ class AddRecipeModal extends Component {
             rows='2'
             onChange = {this.partChange}
             placeholder = 'ingredients - separate each by a comma'
+            value = {parts}
           />
 
         </div>

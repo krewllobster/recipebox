@@ -10,6 +10,7 @@ class App extends Component {
 
     this.state = {
       activeModal: '',
+      editIndex: null,
       recipes: [
         {
           name: 'Spaghetti',
@@ -28,14 +29,24 @@ class App extends Component {
     this.activateModal = this.activateModal.bind(this);
     this.saveRecipe = this.saveRecipe.bind(this);
     this.deleteRecipe = this.deleteRecipe.bind(this);
+    this.updateRecipe = this.updateRecipe.bind(this);
+    this.setEditID = this.setEditID.bind(this);
   }
 
   hideModal() {
     this.setState({activeModal: ''})
   }
 
-  activateModal(e) {
-    this.setState({activeModal: e.target.value})
+  activateModal(e, index = null) {
+    this.setState({
+      activeModal: e.target.value,
+      editIndex: index
+    })
+
+  }
+
+  setEditID(index) {
+    this.setState({editID: index})
   }
 
   saveRecipe(obj) {
@@ -50,9 +61,21 @@ class App extends Component {
     })
   }
 
+  updateRecipe(obj) {
+    this.setState(prevState => {
+      prevState.recipes[prevState.editIndex] = obj;
+      return (
+        {
+          recipes: prevState.recipes,
+          editIndex: null
+        }
+      )
+    })
+  }
+
   render() {
 
-    const {recipes, activeModal} = this.state;
+    const {recipes, activeModal, editIndex} = this.state;
 
     return (
       <div>
@@ -67,13 +90,21 @@ class App extends Component {
           active = {activeModal}
           hideModal = {this.hideModal}
           saveRecipe = {this.saveRecipe}
+          updateRecipe = {this.updateRecipe}
+          recipeToEdit = {recipes[editIndex]}
         />
       </div>
     );
   }
 }
 
-const ModalConductor = ({active, hideModal, saveRecipe}) => {
+const ModalConductor = ({
+  active,
+  hideModal,
+  saveRecipe,
+  updateRecipe,
+  recipeToEdit,
+}) => {
   switch (active) {
     case '':
       return null;
@@ -82,12 +113,18 @@ const ModalConductor = ({active, hideModal, saveRecipe}) => {
         hideModal = {hideModal}
         onOk = {saveRecipe}
       />
+    case 'EDIT':
+      return <AddRecipeModal
+        hideModal = {hideModal}
+        onOk = {updateRecipe}
+        recipe = {recipeToEdit}
+      />
     default:
       return null;
   }
 }
 
-const Recipe = ({item, id, deleteRecipe}) => {
+const Recipe = ({item, id, deleteRecipe, activateModal}) => {
 
   return (
     <div className = 'card recipe'>
@@ -120,8 +157,8 @@ const Recipe = ({item, id, deleteRecipe}) => {
             <div className = 'col-sm-3 col-6'>
               <Button
                 type = 'button'
-                value = 'edit'
-                onClick = {() => {}}
+                value = 'EDIT'
+                onClick = {(event) => activateModal(event, id)}
                 cName = 'btn btn-secondary'
               >
                 Edit
@@ -145,6 +182,7 @@ const RecipeBox = ({recipes, activateModal, deleteRecipe}) =>
           key = {i}
           id = {i}
           item = {item}
+          activateModal = {activateModal}
           deleteRecipe = {deleteRecipe}
         />)}
     </div>
@@ -160,7 +198,7 @@ const RecipeBox = ({recipes, activateModal, deleteRecipe}) =>
   </div>
 
 
-const Button = ({type, selected, onClick, value, children, cName}) => {
+const Button = ({type, index, selected, onClick, value, children, cName}) => {
 
   const buttonClass = classNames(
     cName,
@@ -168,6 +206,7 @@ const Button = ({type, selected, onClick, value, children, cName}) => {
   )
   return (
     <button
+      index = {index}
       className = {buttonClass}
       onClick = {onClick}
       value = {value}
