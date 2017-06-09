@@ -14,7 +14,6 @@
   position: absolute;
   left: 50%;
   right: 50%;
-  margin-top: 10rem;
-  margin-left: -10rem;
+  transform: translate(-50%, 50%);
   z-index: 9999;
 }

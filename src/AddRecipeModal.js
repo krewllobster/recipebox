@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import ModalWrapper from './ModalWrapper.js';
 import classNames from 'classnames';
+import './AddRecipeModal.css';
 
 
 class AddRecipeModal extends Component {
@@ -57,9 +58,41 @@ class AddRecipeModal extends Component {
         onOk = {this.save}
         okText = 'Save'
       >
-        <input type='text' onChange = {this.nameChange}/>
-        <input type='text' onChange = {this.descriptionChange}/>
-        <input type='text' onChange = {this.partChange}/>
+        <div className = 'card-header'>
+          <label for = 'recipeName' className = 'sr-only'>New Recipe</label>
+          <input
+            id = 'recipeName'
+            type='text'
+            className = 'form-control'
+            placeholder = 'recipe name'
+            onChange = {this.nameChange}/>
+        </div>
+        <div className = 'card-block'>
+          <div className = 'form-group'>
+            <label for='recipe-description' className = 'sr-only'>
+              Description
+            </label>
+            <textarea
+              className = 'form-control'
+              id='recipe-description'
+              rows='2'
+              onChange = {this.descriptionChange}
+              placeholder = 'recipe description'
+            />
+          </div>
+
+          <label for='recipe-parts' className = 'sr-only'>
+            Recipe Parts
+          </label>
+          <textarea
+            className = 'form-control'
+            id='recipe-parts'
+            rows='2'
+            onChange = {this.partChange}
+            placeholder = 'ingredients - separate each by a comma'
+          />
+
+        </div>
       </ModalWrapper>
     )
   }

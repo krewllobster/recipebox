@@ -9,7 +9,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activeModal: '',
+      activeModal: 'ADD',
       recipes: [
         {
           name: 'Spaghetti',

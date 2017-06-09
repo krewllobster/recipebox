@@ -5,36 +5,30 @@ import './Modal.css';
 
 const ModalWrapper = props => {
 
-const handleBackgroundClick = e => {
-  if (e.target === e.currentTarget) props.hideModal();
-};
+  const handleBackgroundClick = e => {
+    if (e.target === e.currentTarget) props.hideModal();
+  };
 
-const onOk = () => {
-  props.onOk();
-  props.hideModal();
-}
+  const onOk = () => {
+    props.onOk();
+    props.hideModal();
+  }
 
-const okButton = props.showOk
-  ? (
-    <button
-      className = 'btn btn-primary'
-      onClick={onOk}
-      disabled={props.okDisabled}
-    >
-      {props.okText}
-    </button>
-  ) : null;
+  const okButton = props.showOk
+    ? (
+      <button
+        className = 'btn btn-primary'
+        onClick={onOk}
+        disabled={props.okDisabled}
+      >
+        {props.okText}
+      </button>
+    ) : null;
 
   return (
     <div className = 'backdrop' onClick = {handleBackgroundClick}>
-      <div className = 'card myModal'>
-
-        <div className = 'card-header'>
-          {props.title}
-        </div>
-        <div className = 'card-block'>
-          {props.children}
-        </div>
+      <div className = 'card myModal' style = {{'width': props.width}}>
+        {props.children}
         <div className = 'card-footer'>
           {okButton}
         </div>
@@ -45,7 +39,6 @@ const okButton = props.showOk
 
 ModalWrapper.PropTypes = {
   //props
-  title: PropTypes.string,
   showOk: PropTypes.bool,
   okText: PropTypes.string,
   okDisabled: PropTypes.bool,
@@ -67,7 +60,7 @@ ModalWrapper.defaultProps = {
   showOk: true,
   okText: 'OK',
   okDisabled: false,
-  width: 400,
+  width: 500,
   onOk: () => {},
 }
 
