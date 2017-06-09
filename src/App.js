@@ -9,7 +9,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      activeModal: 'ADD',
+      activeModal: '',
       recipes: [
         {
           name: 'Spaghetti',
@@ -27,6 +27,7 @@ class App extends Component {
     this.hideModal = this.hideModal.bind(this);
     this.activateModal = this.activateModal.bind(this);
     this.saveRecipe = this.saveRecipe.bind(this);
+    this.deleteRecipe = this.deleteRecipe.bind(this);
   }
 
   hideModal() {
@@ -38,9 +39,15 @@ class App extends Component {
   }
 
   saveRecipe(obj) {
-    let newRecipes = this.state.recipes;
-    newRecipes.push(obj);
-    this.setState({recipes: newRecipes})
+    this.setState(prevState => {
+      recipes: prevState.recipes.push(obj)
+    })
+  }
+
+  deleteRecipe(index) {
+    this.setState(prevState => {
+      recipes: prevState.recipes.splice(index)
+    })
   }
 
   render() {
@@ -52,7 +59,9 @@ class App extends Component {
         <div className = 'flex-container main'>
           <RecipeBox
             recipes = {recipes}
-            activateModal = {this.activateModal}/>
+            activateModal = {this.activateModal}
+            deleteRecipe = {this.deleteRecipe}
+          />
         </div>
         <ModalConductor
           active = {activeModal}
@@ -78,7 +87,7 @@ const ModalConductor = ({active, hideModal, saveRecipe}) => {
   }
 }
 
-const Recipe = ({item}) => {
+const Recipe = ({item, id, deleteRecipe}) => {
 
   return (
     <div className = 'card recipe'>
@@ -87,7 +96,9 @@ const Recipe = ({item}) => {
       </div>
       <div className='toggle-on'>
         <div className = 'card-block'>
-          <p className = 'card-text description'>{item.description}</p>
+          <p className = 'card-text description'>
+            {item.description}
+          </p>
         </div>
         <ul className = "list-group list-group-flush">
           {item.parts.map((part, i) => (
@@ -100,7 +111,7 @@ const Recipe = ({item}) => {
               <Button
                 type = 'button'
                 value = 'delete'
-                onClick = {() => {}}
+                onClick = {() => {deleteRecipe(id)}}
                 cName = 'btn btn-danger'
               >
                 Delete
@@ -123,13 +134,19 @@ const Recipe = ({item}) => {
   )
 }
 
-const RecipeBox = ({recipes, activateModal}) =>
+const RecipeBox = ({recipes, activateModal, deleteRecipe}) =>
   <div className = 'card'>
     <div className = 'card-header'>
       <h4 className = 'card-title'>RecipeBox</h4>
     </div>
     <div className = 'card-block'>
-      {recipes.map((item, i) => <Recipe key = {i} item = {item}/>)}
+      {recipes.map((item, i) =>
+        <Recipe
+          key = {i}
+          id = {i}
+          item = {item}
+          deleteRecipe = {deleteRecipe}
+        />)}
     </div>
     <div className = 'card-footer'>
       <Button
