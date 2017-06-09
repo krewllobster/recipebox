@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import AddRecipeModal from './AddRecipeModal.js';
+import { CSSTransitionGroup } from 'react-transition-group';
 import './App.css';
 
 class App extends Component {
@@ -126,12 +127,9 @@ const ModalConductor = ({
 
 const Recipe = ({item, id, deleteRecipe, activateModal}) => {
 
-  return (
-    <div className = 'card recipe'>
-      <div className = 'card-header'>
-        <a className="recipeName">{item.name}</a>
-      </div>
-      <div className='toggle-on'>
+  const Details = ({item, id, deleteRecipe, activateModal}) => {
+    return (
+      <div>
         <div className = 'card-block'>
           <p className = 'card-text description'>
             {item.description}
@@ -167,6 +165,22 @@ const Recipe = ({item, id, deleteRecipe, activateModal}) => {
           </div>
         </div>
       </div>
+    )
+  }
+
+  return (
+    <div className = 'card recipe'>
+      <div className = 'card-header'>
+        <a className="recipeName">{item.name}</a>
+      </div>
+      <div className=''>
+        <Details
+          item = {item}
+          id = {id}
+          deleteRecipe = {deleteRecipe}
+          activateModal = {activateModal}
+        />
+      </div>
     </div>
   )
 }
@@ -184,7 +198,8 @@ const RecipeBox = ({recipes, activateModal, deleteRecipe}) =>
           item = {item}
           activateModal = {activateModal}
           deleteRecipe = {deleteRecipe}
-        />)}
+        />
+      )}
     </div>
     <div className = 'card-footer'>
       <Button
