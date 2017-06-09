@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
+import AddRecipeModal from './AddRecipeModal.js';
 import './App.css';
 
 class App extends Component {
@@ -8,6 +9,7 @@ class App extends Component {
     super(props);
 
     this.state = {
+      activeModal: '',
       recipes: [
         {
           name: 'Spaghetti',
@@ -19,35 +21,64 @@ class App extends Component {
             'meatballs'
           ]
         },
-        {
-          name: 'Spaghettis',
-          description: 'lorem ipsum dolor sit amet',
-          open: false,
-          parts: [
-            'noodles',
-            'sauce',
-            'meatballs'
-          ]
-        },
-      ],
+      ]
     }
+
+    this.hideModal = this.hideModal.bind(this);
+    this.activateModal = this.activateModal.bind(this);
+    this.saveRecipe = this.saveRecipe.bind(this);
+  }
+
+  hideModal() {
+    this.setState({activeModal: ''})
+  }
+
+  activateModal(e) {
+    this.setState({activeModal: e.target.value})
+  }
+
+  saveRecipe(obj) {
+    let newRecipes = this.state.recipes;
+    newRecipes.push(obj);
+    this.setState({recipes: newRecipes})
   }
 
   render() {
 
-    const {recipes} = this.state;
+    const {recipes, activeModal} = this.state;
 
     return (
-      <div className = 'flex-container'>
-        <RecipeBox recipes = {recipes}/>
+      <div>
+        <div className = 'flex-container main'>
+          <RecipeBox
+            recipes = {recipes}
+            activateModal = {this.activateModal}/>
+        </div>
+        <ModalConductor
+          active = {activeModal}
+          hideModal = {this.hideModal}
+          saveRecipe = {this.saveRecipe}
+        />
       </div>
     );
   }
 }
 
-const Recipe = ({item}) => {
+const ModalConductor = ({active, hideModal, saveRecipe}) => {
+  switch (active) {
+    case '':
+      return null;
+    case 'ADD':
+      return <AddRecipeModal
+        hideModal = {hideModal}
+        onOk = {saveRecipe}
+      />
+    default:
+      return null;
+  }
+}
 
-  const toggle =
+const Recipe = ({item}) => {
 
   return (
     <div className = 'card recipe'>
@@ -59,8 +90,8 @@ const Recipe = ({item}) => {
           <p className = 'card-text description'>{item.description}</p>
         </div>
         <ul className = "list-group list-group-flush">
-          {item.parts.map(part => (
-            <li className = 'list-group-item'>{part}</li>
+          {item.parts.map((part, i) => (
+            <li key = {i} className = 'list-group-item'>{part}</li>
           ))}
         </ul>
         <div className = 'card-footer'>
@@ -92,18 +123,18 @@ const Recipe = ({item}) => {
   )
 }
 
-const RecipeBox = ({recipes}) =>
-  <div className = 'card main'>
+const RecipeBox = ({recipes, activateModal}) =>
+  <div className = 'card'>
     <div className = 'card-header'>
       <h4 className = 'card-title'>RecipeBox</h4>
     </div>
     <div className = 'card-block'>
-      {recipes.map(item => <Recipe item = {item} />)}
+      {recipes.map((item, i) => <Recipe key = {i} item = {item}/>)}
     </div>
     <div className = 'card-footer'>
       <Button
-        value = 'addrecipe'
-        onClick = {() => {}}
+        value = 'ADD'
+        onClick = {activateModal}
         cName = 'btn btn-info'
       >
         Add Recipe
