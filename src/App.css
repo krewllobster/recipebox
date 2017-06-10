@@ -6,18 +6,22 @@
 
 .modal-enter {
   opacity: 0.01;
+  transform: translateY(-20px);
 }
 
 .modal-enter.modal-enter-active{
   opacity: 1;
-  transition: opacity 200ms ease-in;
+  transform: translateY(0);
+  transition: all 100ms ease-in;
 }
 
 .modal-leave {
   opacity: 1;
+  transform: translateY(0);
 }
 
 .modal-leave.modal-leave-active {
   opacity: 0.01;
-  transition: opacity 100ms ease-in;
+  transform: translateY(-20px);
+  transition: all 100ms ease-in;
 }

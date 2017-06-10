@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import AddRecipeModal from './AddRecipeModal.js';
 import EditRecipeModal from './EditRecipeModal.js';
 import RecipeBox from './RecipeBox.js'
@@ -106,17 +107,15 @@ class App extends Component {
         </div>
         <CSSTransitionGroup
           transitionName = 'modal'
-          transitionAppear = {true}
-          transitionEnterTimeout = {200}
-          transitionAppearTimeout = {200}
+          transitionEnterTimeout = {100}
           transitionLeaveTimeout = {100}
         >
           <ModalConductor
             active = {activeModal}
-            hideModal = {this.hideModal}
-            saveRecipe = {this.saveRecipe}
-            updateRecipe = {this.updateRecipe}
-            recipeToEdit = {recipes[editIndex]}
+            hide = {this.hideModal}
+            save = {this.saveRecipe}
+            update = {this.updateRecipe}
+            toUpdate = {recipes[editIndex]}
             key = {activeModal}
           />
         </CSSTransitionGroup>
@@ -127,31 +126,46 @@ class App extends Component {
 
 const ModalConductor = ({
   active,
-  hideModal,
-  saveRecipe,
-  updateRecipe,
-  recipeToEdit,
+  hide,
+  save,
+  update,
+  toUpdate,
 }) => {
   switch (active) {
     case '':
       return null;
     case 'ADD':
       return <AddRecipeModal
-        hideModal = {hideModal}
-        onOk = {saveRecipe}
+        hideModal = {hide}
+        onOk = {save}
         title = 'Add Recipe'
       />
     case 'EDIT':
       return <EditRecipeModal
-        hideModal = {hideModal}
-        onOk = {updateRecipe}
-        recipe = {recipeToEdit}
+        hideModal = {hide}
+        onOk = {update}
+        recipe = {toUpdate}
         title = 'Edit Recipe'
         id = 'EDIT'
       />
     default:
       return null;
   }
+}
+
+ModalConductor.PropTypes = {
+  //props
+  active: PropTypes.string.required,
+  toEdit: PropTypes.object,
+  //funcs
+  hide: PropTypes.func.required,
+  save: PropTypes.func,
+  update: PropTypes.func,
+}
+
+ModalConductor.defaultProps = {
+  active: '',
+  toEdit: {},
 }
 
 export default App;
