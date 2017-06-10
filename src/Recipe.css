@@ -1,0 +1,34 @@
+.recipeName {
+  width: 100%;
+}
+
+.recipeHeader:hover {
+  cursor: pointer;
+}
+
+.description {
+  font-style: italic;
+}
+
+.recipe {
+  margin-bottom: 10px;
+  overflow: scroll;
+}
+
+.details-enter {
+  max-height: 0;
+}
+
+.details-enter.details-enter-active {
+  max-height: 500px;
+  transition: all 200ms ease-in;
+}
+
+.details-leave {
+  max-height: 500px;
+}
+
+.details-leave.details-leave-active {
+  max-height: 0;
+  transition: all 200ms ease-out;
+}
