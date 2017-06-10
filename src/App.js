@@ -44,7 +44,6 @@ class App extends Component {
       activeModal: e.target.value,
       editIndex: index
     })
-
   }
 
   setEditID(index) {
@@ -58,8 +57,10 @@ class App extends Component {
   }
 
   deleteRecipe(index) {
+    console.log('deleting index ' + index);
     let newRecipes = this.state.recipes;
-    newRecipes.splice(index);
+    newRecipes.splice(index, 1);
+    console.log(newRecipes);
     this.setState({recipes: newRecipes})
   }
 
