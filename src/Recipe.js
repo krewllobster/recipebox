@@ -10,8 +10,6 @@ class Recipe extends Component {
     const {
       id,
       item,
-      deleteRecipe,
-      activateModal,
       showRecipe
     } = this.props;
 

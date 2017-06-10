@@ -39,6 +39,7 @@ const ModalWrapper = props => {
 
 ModalWrapper.PropTypes = {
   //props
+  title: PropTypes.string,
   showOk: PropTypes.bool,
   okText: PropTypes.string,
   okDisabled: PropTypes.bool,

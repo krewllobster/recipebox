@@ -3,16 +3,18 @@ import ModalWrapper from './ModalWrapper.js';
 import './AddRecipeModal.css';
 
 
-class AddRecipeModal extends Component {
+class EditRecipeModal extends Component {
 
   constructor(props) {
     super(props);
 
+    const {recipe} = this.props
+
     this.state = {
-      name: '',
-      parts: [],
-      description: '',
-      open: false,
+      name: recipe.name,
+      parts: recipe.parts,
+      description: recipe.description,
+      open: true,
     }
 
     this.onOk = this.props.onOk;
@@ -82,7 +84,10 @@ class AddRecipeModal extends Component {
       >
         <div className = 'card-header text-center'>
           <h2 className = 'lead'>
-            {this.props.title}
+            {this.props.recipe
+              ? 'Edit recipe'
+              : 'Add recipe'
+            }
           </h2>
         </div>
         <div className = 'card-block'>
@@ -130,4 +135,4 @@ class AddRecipeModal extends Component {
   }
 }
 
-export default AddRecipeModal;
+export default EditRecipeModal;

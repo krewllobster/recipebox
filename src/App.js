@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import AddRecipeModal from './AddRecipeModal.js';
+import EditRecipeModal from './EditRecipeModal.js';
 import RecipeBox from './RecipeBox.js'
 import { CSSTransitionGroup } from 'react-transition-group';
 import './App.css';
@@ -15,7 +16,7 @@ class App extends Component {
       recipes: [
         {
           name: 'Spaghetti',
-          description: 'lorem ipsum dolor sit amet',
+          description: 'a delicious pasta dish',
           open: false,
           parts: [
             'noodles',
@@ -33,6 +34,13 @@ class App extends Component {
     this.updateRecipe = this.updateRecipe.bind(this);
     this.setEditID = this.setEditID.bind(this);
     this.showRecipe = this.showRecipe.bind(this);
+  }
+
+  componentWillMount() {
+    const existingRecipes = JSON.parse(localStorage.getItem('recipes'));
+    if (existingRecipes) {
+      this.setState({recipes: existingRecipes});
+    }
   }
 
   hideModal() {
@@ -131,12 +139,14 @@ const ModalConductor = ({
       return <AddRecipeModal
         hideModal = {hideModal}
         onOk = {saveRecipe}
+        title = 'Add Recipe'
       />
     case 'EDIT':
-      return <AddRecipeModal
+      return <EditRecipeModal
         hideModal = {hideModal}
         onOk = {updateRecipe}
         recipe = {recipeToEdit}
+        title = 'Edit Recipe'
         id = 'EDIT'
       />
     default:
