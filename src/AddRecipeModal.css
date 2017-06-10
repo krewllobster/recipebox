@@ -1,4 +1,11 @@
 input {
   width: 100%;
+}
+
+textarea {
+  resize: none;
+}
+
+h2.actionName {
   margin-bottom: 0;
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import classNames from 'classnames';
 import AddRecipeModal from './AddRecipeModal.js';
+import RecipeBox from './RecipeBox.js'
 import { CSSTransitionGroup } from 'react-transition-group';
 import './App.css';
 
@@ -32,6 +32,7 @@ class App extends Component {
     this.deleteRecipe = this.deleteRecipe.bind(this);
     this.updateRecipe = this.updateRecipe.bind(this);
     this.setEditID = this.setEditID.bind(this);
+    this.showRecipe = this.showRecipe.bind(this);
   }
 
   hideModal() {
@@ -51,15 +52,21 @@ class App extends Component {
   }
 
   saveRecipe(obj) {
-    this.setState(prevState => {
-      recipes: prevState.recipes.push(obj)
-    })
+    let newRecipes = this.state.recipes;
+    newRecipes.push(obj);
+    this.setState({recipes: newRecipes})
   }
 
   deleteRecipe(index) {
-    this.setState(prevState => {
-      recipes: prevState.recipes.splice(index)
-    })
+    let newRecipes = this.state.recipes;
+    newRecipes.splice(index);
+    this.setState({recipes: newRecipes})
+  }
+
+  showRecipe(index) {
+    const recipes = this.state.recipes;
+    recipes.map((item, i) => item.open = i === index ? !item.open : false)
+    this.setState({recipes: recipes})
   }
 
   updateRecipe(obj) {
@@ -85,15 +92,25 @@ class App extends Component {
             recipes = {recipes}
             activateModal = {this.activateModal}
             deleteRecipe = {this.deleteRecipe}
+            showRecipe = {this.showRecipe}
           />
         </div>
-        <ModalConductor
-          active = {activeModal}
-          hideModal = {this.hideModal}
-          saveRecipe = {this.saveRecipe}
-          updateRecipe = {this.updateRecipe}
-          recipeToEdit = {recipes[editIndex]}
-        />
+        <CSSTransitionGroup
+          transitionName = 'modal'
+          transitionAppear = {true}
+          transitionEnterTimeout = {200}
+          transitionAppearTimeout = {200}
+          transitionLeaveTimeout = {100}
+        >
+          <ModalConductor
+            active = {activeModal}
+            hideModal = {this.hideModal}
+            saveRecipe = {this.saveRecipe}
+            updateRecipe = {this.updateRecipe}
+            recipeToEdit = {recipes[editIndex]}
+            key = {activeModal}
+          />
+        </CSSTransitionGroup>
       </div>
     );
   }
@@ -119,114 +136,11 @@ const ModalConductor = ({
         hideModal = {hideModal}
         onOk = {updateRecipe}
         recipe = {recipeToEdit}
+        id = 'EDIT'
       />
     default:
       return null;
   }
-}
-
-const Recipe = ({item, id, deleteRecipe, activateModal}) => {
-
-  const Details = ({item, id, deleteRecipe, activateModal}) => {
-    return (
-      <div>
-        <div className = 'card-block'>
-          <p className = 'card-text description'>
-            {item.description}
-          </p>
-        </div>
-        <ul className = "list-group list-group-flush">
-          {item.parts.map((part, i) => (
-            <li key = {i} className = 'list-group-item'>{part}</li>
-          ))}
-        </ul>
-        <div className = 'card-footer'>
-          <div className = 'row'>
-            <div className = 'col-sm-3 col-6'>
-              <Button
-                type = 'button'
-                value = 'delete'
-                onClick = {() => {deleteRecipe(id)}}
-                cName = 'btn btn-danger'
-              >
-                Delete
-              </Button>
-            </div>
-            <div className = 'col-sm-3 col-6'>
-              <Button
-                type = 'button'
-                value = 'EDIT'
-                onClick = {(event) => activateModal(event, id)}
-                cName = 'btn btn-secondary'
-              >
-                Edit
-              </Button>
-            </div>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  return (
-    <div className = 'card recipe'>
-      <div className = 'card-header'>
-        <a className="recipeName">{item.name}</a>
-      </div>
-      <div className=''>
-        <Details
-          item = {item}
-          id = {id}
-          deleteRecipe = {deleteRecipe}
-          activateModal = {activateModal}
-        />
-      </div>
-    </div>
-  )
-}
-
-const RecipeBox = ({recipes, activateModal, deleteRecipe}) =>
-  <div className = 'card'>
-    <div className = 'card-header'>
-      <h4 className = 'card-title'>RecipeBox</h4>
-    </div>
-    <div className = 'card-block'>
-      {recipes.map((item, i) =>
-        <Recipe
-          key = {i}
-          id = {i}
-          item = {item}
-          activateModal = {activateModal}
-          deleteRecipe = {deleteRecipe}
-        />
-      )}
-    </div>
-    <div className = 'card-footer'>
-      <Button
-        value = 'ADD'
-        onClick = {activateModal}
-        cName = 'btn btn-info'
-      >
-        Add Recipe
-      </Button>
-    </div>
-  </div>
-
-
-const Button = ({type, index, selected, onClick, value, children, cName}) => {
-
-  const buttonClass = classNames(
-    cName,
-    {'button-active': selected === value}
-  )
-  return (
-    <button
-      index = {index}
-      className = {buttonClass}
-      onClick = {onClick}
-      value = {value}
-    >{children}</button>
-  )
 }
 
 export default App;

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import ModalWrapper from './ModalWrapper.js';
-import classNames from 'classnames';
 import './AddRecipeModal.css';
 
 
@@ -15,6 +14,7 @@ class AddRecipeModal extends Component {
       name: recipe ? recipe.name : '',
       parts: recipe ? recipe.parts : [],
       description: recipe ? recipe.description : '',
+      open: recipe ? true : false,
     }
 
     this.onOk = this.props.onOk;
@@ -23,6 +23,11 @@ class AddRecipeModal extends Component {
     this.partChange = this.partChange.bind(this);
     this.descriptionChange = this.descriptionChange.bind(this);
     this.save = this.save.bind(this);
+    this.focus = this.focus.bind(this);
+  }
+
+  focus() {
+    this.textInput.focus();
   }
 
   nameChange(e) {
@@ -40,12 +45,12 @@ class AddRecipeModal extends Component {
   }
 
   save() {
-    const {name, parts, description} = this.state;
+    const {name, parts, description, open} = this.state;
     let newRecipe = {
       'name': name,
       'parts': parts,
       'description': description,
-      'open': false,
+      'open': open
     }
     this.onOk(newRecipe);
   }
@@ -61,6 +66,10 @@ class AddRecipeModal extends Component {
     this.updateRecipe(newRecipe);
   }
 
+  componentDidMount() {
+    this.focus();
+  }
+
   render() {
 
     const {name, parts, description} = this.state;
@@ -73,39 +82,48 @@ class AddRecipeModal extends Component {
         onOk = {this.save}
         okText = 'Save'
       >
-        <div className = 'card-header'>
-          <label for = 'recipeName' className = 'sr-only'>New Recipe</label>
-          <input
-            id = 'recipeName'
-            type='text'
-            className = 'form-control'
-            placeholder = 'recipe name'
-            onChange = {this.nameChange}
-            value = {name}
-          />
+        <div className = 'card-header text-center'>
+          <h2 className = 'lead'>
+            {this.props.recipe
+              ? 'Edit recipe'
+              : 'Add recipe'
+            }
+          </h2>
         </div>
         <div className = 'card-block'>
           <div className = 'form-group'>
-            <label for='recipe-description' className = 'sr-only'>
+            <label htmlFor = 'recipeName' className = 'sr-only'>New Recipe</label>
+            <input
+              id = 'recipeName'
+              type='text'
+              className = 'form-control'
+              placeholder = 'recipe name'
+              onChange = {this.nameChange}
+              value = {name}
+              ref = {c => this.textInput = c}
+            />
+          </div>
+          <div className = 'form-group'>
+            <label htmlFor='recipe-description' className = 'sr-only'>
               Description
             </label>
             <textarea
               className = 'form-control'
               id='recipe-description'
-              rows='2'
+              rows='3'
               onChange = {this.descriptionChange}
               placeholder = 'recipe description'
               value = {description}
             />
           </div>
 
-          <label for='recipe-parts' className = 'sr-only'>
+          <label htmlFor='recipe-parts' className = 'sr-only'>
             Recipe Parts
           </label>
           <textarea
             className = 'form-control'
             id='recipe-parts'
-            rows='2'
+            rows='3'
             onChange = {this.partChange}
             placeholder = 'ingredients - separate each by a comma'
             value = {parts}

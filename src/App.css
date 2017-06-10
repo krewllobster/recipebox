@@ -4,14 +4,20 @@
   margin-top: 20px;
 }
 
-.recipe {
-  margin-bottom: 10px;
+.modal-enter {
+  opacity: 0.01;
 }
 
-.recipeName {
-  width: 100%;
+.modal-enter.modal-enter-active{
+  opacity: 1;
+  transition: opacity 200ms ease-in;
 }
 
-.description {
-  font-style: italic;
+.modal-leave {
+  opacity: 1;
+}
+
+.modal-leave.modal-leave-active {
+  opacity: 0.01;
+  transition: opacity 100ms ease-in;
 }

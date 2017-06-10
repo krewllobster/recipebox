@@ -1,6 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { CSSTransitionGroup } from 'react-transition-group';
 import './ModalWrapper.css';
 
 
@@ -27,24 +26,14 @@ const ModalWrapper = props => {
     ) : null;
 
   return (
-    <CSSTransitionGroup
-      transitionName="backdrop"
-      transitionAppear={true}
-      transitionEnter={false}
-      transitionLeave={true}
-      transitionAppearTimeout={100}
-      transitionEnterTimeut={500}
-      transitionLeaveTimeout={500}
-    >
-      <div className = 'backdrop' onClick = {handleBackgroundClick}>
-        <div className = 'card myModal' style = {{'width': props.width}}>
-          {props.children}
-          <div className = 'card-footer'>
-            {okButton}
-          </div>
+    <div className = 'backdrop' onClick = {handleBackgroundClick}>
+      <div className = 'card myModal' style = {{'width': props.width}}>
+        {props.children}
+        <div className = 'card-footer'>
+          {okButton}
         </div>
       </div>
-    </CSSTransitionGroup>
+    </div>
   );
 };
 
